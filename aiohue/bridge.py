@@ -9,8 +9,9 @@ from .errors import raise_error
 class Bridge:
     """Control a Hue bridge."""
 
-    def __init__(self, host, websession, *, username=None, bridge_id=None):
+    def __init__(self, host, websession, *, username=None, bridge_id=None, port=80):
         self.host = host
+        self.port = port
         self.username = username
         self.websession = websession
         self._bridge_id = bridge_id
@@ -55,7 +56,7 @@ class Bridge:
 
     async def request(self, method, path, json=None, auth=True):
         """Make a request to the API."""
-        url = "http://{}/api/".format(self.host)
+        url = "http://{}:{}/api/".format(self.host, self.port)
         if auth:
             url += "{}/".format(self.username)
         url += path
